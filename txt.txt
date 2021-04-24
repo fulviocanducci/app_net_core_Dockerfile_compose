@@ -1,0 +1,2 @@
+docker build -t app_net_docker .
+docker run -d -p 8080:80 --name app_web app_net_docker
