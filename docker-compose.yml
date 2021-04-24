@@ -1,0 +1,23 @@
+version: '3.4'
+
+services:
+  web:
+    image: ${DOCKER_REGISTRY-}api
+    container_name: Site
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+  db:
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=development
+      - MYSQL_DATABASE=mydatabase
+    ports:
+      - "3308:3306"
+    volumes: 
+      - mysqldata:/var/lib/mysql
+
+volumes:
+  mysqldata:

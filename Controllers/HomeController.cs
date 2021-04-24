@@ -1,26 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using app_net_docker.Models;
+using app_net_docker.Services;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System;
 
 namespace app_net_docker.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly Db db;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, Db db)
         {
+            this.db = db;
             _logger = logger;
         }
 
         public IActionResult Index()
         {
-            return View();
+
+            Todo todo = new Todo() 
+            {
+                Description = Guid.NewGuid().ToString()
+            };
+            db.Todo.Add(todo);
+            db.SaveChanges();
+            return View(db.Todo.ToList());
         }
 
         public IActionResult Privacy()
